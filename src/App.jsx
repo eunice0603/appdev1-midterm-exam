@@ -76,6 +76,7 @@ function App() {
             <i className="fa fa-times" />
           </span>
         </div>
+
         <section className="popupBody">
           {/* Social Login */}
           <div className="social_login">
@@ -109,6 +110,7 @@ function App() {
               </div>
             </div>
           </div>
+
           {/* Username & Password Login form */}
           <div className="user_login">
             <form>
@@ -139,6 +141,7 @@ function App() {
               Forgot password?
             </a>
           </div>
+          
           {/* Register Form */}
           <div className="user_register">
             <form>

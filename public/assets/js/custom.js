@@ -36,11 +36,54 @@
       }
   });
   
-  $("#modal_trigger").leanModal({
-		top: 100,
-		overlay: 0.6,
-		closeButton: ".modal_close"
-});
+  // Initialize the modal after DOM is ready so elements rendered by React exist
+  $(function() {
+    $("#modal_trigger").leanModal({
+      top: 100,
+      overlay: 0.6,
+      closeButton: ".modal_close"
+    });
+  });
+
+  // Support dynamic insertion of #modal_trigger by React: delegate click to document
+  (function() {
+    var options = { top: 100, overlay: 0.6, closeButton: ".modal_close" };
+
+    function close_modal(modal_id) {
+      $("#lean_overlay").fadeOut(200);
+      $(modal_id).css({ display: "none" });
+    }
+
+    $(document).on('click', '#modal_trigger', function(e) {
+      e.preventDefault();
+      var modal_id = $(this).attr('href');
+
+      // create overlay if missing
+      if ($('#lean_overlay').length === 0) {
+        $('body').append("<div id='lean_overlay'></div>");
+      }
+
+      // bind overlay and close button
+      $('#lean_overlay').off('click').on('click', function() { close_modal(modal_id); });
+      $(options.closeButton).off('click').on('click', function() { close_modal(modal_id); });
+
+      var modal_height = $(modal_id).outerHeight();
+      var modal_width = $(modal_id).outerWidth();
+
+      $("#lean_overlay").css({ display: 'block', opacity: 0 });
+      $("#lean_overlay").fadeTo(200, options.overlay);
+      $(modal_id).css({
+        display: 'block',
+        position: 'fixed',
+        opacity: 0,
+        'z-index': 11000,
+        left: '50%',
+        'margin-left': -(modal_width / 2) + 'px',
+        top: options.top + 'px'
+      });
+      $(modal_id).fadeTo(200, 1);
+    });
+  })();
 
 $(function() {
 		// Calling Login Form
